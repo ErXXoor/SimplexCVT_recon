@@ -16,10 +16,16 @@ namespace GEO_BASE{
         void run_threads();
         void reconstructhd(double r);
         void extract_triangles();
+        void post_process();
+
+        void reconstruct3d(double r);
+
 
         void save_raw_triangles(const std::string& filename);
         void save_T3_triangles(const std::string& filename);
         void save_T12_triangles(const std::string& filename);
+
+        void save_final_mesh(const std::string& filename);
 
     private:
         GEO::Mesh& mesh_;
@@ -50,6 +56,11 @@ namespace GEO_BASE{
         Co3NeRestrictedVoronoiDiagram& RVD() {
             return RVD_;
         }
+
+        unsigned int dim() const {
+            return mesh_.vertices.dimension();
+        }
+
     };
 }
 #endif //SIMPLEXCVT_RECON_CO3NE_H

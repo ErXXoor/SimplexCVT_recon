@@ -32,17 +32,14 @@ int main(int argc, char **argv){
     }
 
     GEO::Mesh point_in(dim);
+    Base::MeshAdaptor::LoadXYZ(input_filename, point_in, dim);
 
-    Base::MeshAdaptor::LoadHDXYZ(input_filename, point_in, dim);
 
-    double R = GEO::bbox_diagonal(point_in);
 //    GEO::mesh_repair(point_in, GEO::MESH_REPAIR_COLOCATE, 1e-6*R);
-
-    double radius =5*0.01*R;
 
     RVD::SurfRec reconstructor;
     reconstructor.init(point_in);
-    reconstructor.Co3ne_rec(output_filename);
+    reconstructor.Co3ne_rec(output_filename,dim);
 
 
     return 0;

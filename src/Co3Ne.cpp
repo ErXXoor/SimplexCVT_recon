@@ -11,6 +11,7 @@
 #include <geogram/mesh/mesh_repair.h>
 #include "Base/MeshAdaptor.h"
 #include <Eigen/Dense>
+#include <geogram/points/co3ne.h>
 namespace GEO_BASE{
     GEO_BASE::Co3Ne::Co3Ne(GEO::Mesh& M):mesh_(M){
         RVD_.init(M);
@@ -48,11 +49,31 @@ namespace GEO_BASE{
                 << "construct tangent plane"
                 << std::endl;
 
-        RVD_.set_nb_neighbors(30);
+        RVD_.set_nb_neighbors(60);
         RVD_.set_circles_radius(r);
 
         for(GEO::index_t t = 0; t < thread_.size(); t++) {
             thread_[t]->set_mode(CO3NE_TANGENT_AND_RECONSTRUCT);
+            thread_[t]->triangles().clear();
+        }
+        progress.progress(1);
+        run_threads();
+        progress.progress(50);
+    }
+
+    void Co3Ne::reconstruct3d(double r) {
+        GEO::mesh_repair(mesh_,GEO::MESH_REPAIR_COLOCATE, 1e-8*r);
+        GEO::ProgressTask progress("reconstruct",100);
+        GEO::Stopwatch W("Co3Ne recons");
+        GEO::Logger::out("Co3Ne")
+                << "construct tangent plane"
+                << std::endl;
+
+        RVD_.set_nb_neighbors(30);
+        RVD_.set_circles_radius(r);
+
+        for(GEO::index_t t = 0; t < thread_.size(); t++) {
+            thread_[t]->set_mode(CO3NE_NORMALS_AND_RECONSTRUCT);
             thread_[t]->triangles().clear();
         }
         progress.progress(1);
@@ -113,7 +134,14 @@ namespace GEO_BASE{
 
         mesh_reorient(mesh_);
 
-        progress.progress(60);
+        progress.progress(100);
+
+    }
+
+    void Co3Ne::post_process() {
+        GEO::mesh_repair(mesh_,GEO::MeshRepairMode(
+                GEO::MESH_REPAIR_DEFAULT | GEO::MESH_REPAIR_RECONSTRUCT
+        ));
     }
 
     void Co3Ne::save_raw_triangles(const std::string &filename) {
@@ -132,5 +160,12 @@ namespace GEO_BASE{
         GEO::Logger::out("Co3Ne") << ">> output T12 triangles"
                              << std::endl;
         Base::MeshAdaptor::SaveMesh(mesh_, T12_triangles_, filename);
+    }
+
+    void Co3Ne::save_final_mesh(const std::string &filename) {
+        GEO::Logger::out("Co3Ne") << ">> output Final triangles"
+                                  << std::endl;
+        Base::MeshAdaptor::SaveMesh(mesh_,filename);
+
     }
 }

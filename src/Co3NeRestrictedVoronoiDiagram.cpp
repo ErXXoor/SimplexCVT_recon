@@ -11,16 +11,17 @@ namespace GEO_BASE{
             n_(nullptr),
             n_stride_(0),
             radius_(0.0),
-            NN_(GEO::NearestNeighborSearch::create(6)),
-            NN3d_(GEO::NearestNeighborSearch::create(3)),
             sqROS_(0.0),
             nb_neighbors_(0) {
-
     }
 
     void Co3NeRestrictedVoronoiDiagram::init(GEO::Mesh& M) {
         geo_assert(M.vertices.dimension() >= 3);
-        geo_assert(M.vertices.dimension() == 3 || NN_->stride_supported());
+//        geo_assert(M.vertices.dimension() == 3 || NN_->stride_supported());
+
+        NN_ = GEO::NearestNeighborSearch::create(M.vertices.dimension());
+        NN3d_ = GEO::NearestNeighborSearch::create(3);
+
         double* normals_pointer = nullptr;
         {
             GEO::Attribute<double> normal;
@@ -138,7 +139,7 @@ namespace GEO_BASE{
                                                 GEO::vector<double>& squared_dist) const{
         Eigen::MatrixXd temp = Co3NeTools::manifold_table *tangent_basis.transpose();
 
-        Eigen::MatrixXd local_table = Co3NeTools::manifold_table*radius_*0.8;
+        Eigen::MatrixXd local_table = Co3NeTools::manifold_table*radius_;
         local_table = local_table*tangent_basis.transpose();
         Eigen::VectorXd center = point_hd(i);
         local_table = local_table.rowwise() + center.transpose();
@@ -167,9 +168,10 @@ namespace GEO_BASE{
                 jj++;
             }
             while(jj < nb_neigh) {
-                if(squared_dist[jj] > sqROS_) {
-                    return;
-                }
+
+//                if(squared_dist[jj] > sqROS_) {
+//                    return;
+//                }
                 GEO::index_t j = neighbor[jj];
                 double Rk = Co3NeTools::squared_radius_hd(point_hd(i), P);
                 if(squared_dist[jj] > 4.0 * Rk) {

@@ -13,7 +13,9 @@ namespace RVD{
         ~SurfRec() = default;
 
         void init(GEO::Mesh& point_in);
-        void Co3ne_rec(std::string output_file);
+        void Co3ne_rec(const std::string& output_file,int dim,bool post_process = false);
+
+        void Co3ne_rec3d(const std::string& output_file);
 
     private:
         double m_radius;

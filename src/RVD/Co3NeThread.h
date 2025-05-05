@@ -19,6 +19,7 @@ namespace GEO_BASE{
         void run() override;
 
         void run_tangent_and_reconstruct();
+        void run_normals_and_reconstruct();
 
     private:
         Co3Ne* master_;

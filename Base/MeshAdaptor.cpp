@@ -6,7 +6,7 @@
 #include <geogram/mesh/mesh_io.h>
 
 namespace Base{
-    void MeshAdaptor::LoadHDXYZ(const std::string &filepath, GEO::Mesh &mesh,int dim) {
+    void MeshAdaptor::LoadXYZ(const std::string &filepath, GEO::Mesh &mesh,int dim) {
         mesh.clear();
         mesh.vertices.set_double_precision();
         mesh.vertices.set_dimension(dim);
@@ -49,5 +49,13 @@ namespace Base{
         M.facets.assign_triangle_mesh(triangles, false);
         M.vertices.set_dimension(3);
         GEO::mesh_save(M, filepath);
+    }
+
+    void MeshAdaptor::SaveMesh(GEO::Mesh& mesh,
+                               const std::string &filepath) {
+        GEO::MeshIOFlags flags;
+        flags.set_attribute(GEO::MESH_ALL_ATTRIBUTES);
+        flags.set_dimension(3);
+        GEO::mesh_save(mesh, filepath, flags);
     }
 }

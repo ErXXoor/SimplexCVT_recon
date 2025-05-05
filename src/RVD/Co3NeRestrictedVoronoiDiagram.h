@@ -63,6 +63,8 @@ namespace GEO_BASE{
             // clip a circle of radius r
         }
 
+
+
         GEO::index_t nb_points() const {
             return nb_points_;
         }

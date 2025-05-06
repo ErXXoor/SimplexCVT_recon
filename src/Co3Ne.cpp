@@ -9,6 +9,7 @@
 #include <geogram/basic/progress.h>
 #include <geogram/basic/stopwatch.h>
 #include <geogram/mesh/mesh_repair.h>
+#include <geogram/mesh/mesh_io.h>
 #include "Base/MeshAdaptor.h"
 #include <Eigen/Dense>
 #include <geogram/points/co3ne.h>
@@ -118,6 +119,27 @@ namespace GEO_BASE{
                 raw_triangles_, T3_triangles_, T12_triangles_
         );
 
+//        GEO::Mesh M_t3;
+//        M_t3.vertices.assign_points(
+//                mesh_.vertices.point_ptr(0),
+//                mesh_.vertices.dimension(),
+//                mesh_.vertices.nb()
+//        );
+//        M_t3.facets.assign_triangle_mesh(T3_triangles_, false);
+//        M_t3.vertices.set_dimension(3);
+//        GEO::mesh_save(M_t3, "/Users/lihongbo/Desktop/code/SimplexCVT_recon/tmp/co3ne_T3.obj");
+//
+//        GEO::Mesh M_t12;
+//        M_t12.vertices.assign_points(
+//                mesh_.vertices.point_ptr(0),
+//                mesh_.vertices.dimension(),
+//                mesh_.vertices.nb()
+//        );
+//        M_t12.facets.assign_triangle_mesh(T12_triangles_, false);
+//        M_t12.vertices.set_dimension(3);
+//        GEO::mesh_save(M_t12, "/Users/lihongbo/Desktop/code/SimplexCVT_recon/tmp/co3ne_T12.obj");
+
+
         progress.progress(83);
 
         Co3NeManifoldExtraction manifold_extraction(
@@ -142,6 +164,10 @@ namespace GEO_BASE{
         GEO::mesh_repair(mesh_,GEO::MeshRepairMode(
                 GEO::MESH_REPAIR_DEFAULT | GEO::MESH_REPAIR_RECONSTRUCT
         ));
+
+//        GEO::mesh_repair(mesh_,GEO::MeshRepairMode(GEO::MESH_REPAIR_DEFAULT));
+
+//        GEO::mesh_postprocess_RDT(mesh_, true);
     }
 
     void Co3Ne::save_raw_triangles(const std::string &filename) {

@@ -49,8 +49,10 @@ namespace GEO_BASE{
                     i, neigh, sq_dist, nb_neigh
             );
 
-            Eigen::MatrixXd nb_points(nb_neigh, master_->dim());
-            for(GEO::index_t jj = 0; jj < neigh.size(); jj++) {
+            int pca_nb_neigh = 6;
+
+            Eigen::MatrixXd nb_points(pca_nb_neigh, master_->dim());
+            for(GEO::index_t jj = 0; jj < pca_nb_neigh; jj++) {
                 for(GEO::index_t kk = 0; kk < 6; kk++) {
                     nb_points(jj, kk) = RVD.point_ptr(neigh[jj])[kk];
                 }
@@ -95,8 +97,6 @@ namespace GEO_BASE{
                 }
             }
         }
-        auto aaa = 0;
-        &aaa;
     }
 
     void Co3NeThread::run_normals_and_reconstruct(){

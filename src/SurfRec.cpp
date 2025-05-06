@@ -30,7 +30,7 @@ namespace RVD{
 //        m_radius = total_distance/point_in.vertices.nb();
 
         auto R = GEO::bbox_diagonal(point_in);
-        m_radius = 0.05*R;
+        m_radius = 0.5*R;
 
         m_co3ne = std::make_shared<GEO_BASE::Co3Ne>(point_in);
     }

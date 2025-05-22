@@ -52,8 +52,9 @@ namespace GEO_BASE{
             int pca_nb_neigh = 6;
 
             Eigen::MatrixXd nb_points(pca_nb_neigh, master_->dim());
+
             for(GEO::index_t jj = 0; jj < pca_nb_neigh; jj++) {
-                for(GEO::index_t kk = 0; kk < 6; kk++) {
+                for(GEO::index_t kk = 0; kk < master_->dim(); kk++) {
                     nb_points(jj, kk) = RVD.point_ptr(neigh[jj])[kk];
                 }
             }
@@ -62,7 +63,9 @@ namespace GEO_BASE{
 
             RVD.get_RVC(i,tangent_basis,P,Q,neigh,sq_dist);
 
-//
+//            RVD.get_RVC(i,tangent_basis,P,Q,neigh_3d,sq_dist);
+
+
 //            RVD.get_RVC(i, N, P, Q, neigh, sq_dist);
 //            if(debug_RVD) {
 //                for(index_t v = 0; v < P.nb_vertices(); ++v) {

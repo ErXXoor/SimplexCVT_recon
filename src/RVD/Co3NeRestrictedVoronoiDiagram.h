@@ -30,7 +30,12 @@ namespace GEO_BASE{
                      Polygon_hd& P,Polygon_hd& Q,
                      GEO::vector<GEO::index_t>& neighbor,
                      GEO::vector<double>& squared_dist
-        ) const;
+        );
+
+        void get_neighbor_by_3d(GEO::index_t i,
+                                GEO::vector<GEO::index_t>& neigh,
+                                GEO::vector<double>& sq_dist,
+                                GEO::index_t nb);
 
     private:
         friend class Co3Ne;
@@ -129,17 +134,6 @@ namespace GEO_BASE{
             );
         }
 
-        void get_neighbors3d(
-                GEO::index_t i,
-                GEO::index_t* neigh,
-                double* sq_dist,
-                GEO::index_t nb
-        ) const {
-            return NN3d_->get_nearest_neighbors(
-                    nb, i, neigh, sq_dist
-            );
-        }
-
         void get_neighbors(
                 GEO::index_t i,
                 GEO::vector<GEO::index_t>& neigh,
@@ -149,7 +143,6 @@ namespace GEO_BASE{
             neigh.resize(nb);
             sq_dist.resize(nb);
             get_neighbors(i, neigh.data(), sq_dist.data(), nb);
-//            get_neighbors3d(i,neigh.data(),sq_dist.data(),nb);
         }
 
         void get_RVC(

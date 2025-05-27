@@ -216,6 +216,12 @@ namespace GEO_BASE{
         return full_eigen.rightCols(2);
     }
 
+    double Co3NeTools::L2_distance(const double *p1, const double *p2, int dim) {
+        Eigen::Map<const Eigen::VectorXd> v1(p1, dim);
+        Eigen::Map<const Eigen::VectorXd> v2(p2, dim);
+        return (v1 - v2).norm();
+    }
+
     double Co3NeTools::squared_radius(const GEO::vec3& p, const Polygon& P) {
         double result = 0.0;
         for(GEO::index_t i = 0; i < P.nb_vertices(); i++) {

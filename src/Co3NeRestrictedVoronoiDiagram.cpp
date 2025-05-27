@@ -3,6 +3,7 @@
 //
 #include "RVD/Co3NeRestrictedVoronoiDiagram.h"
 #include "RVD/Co3NeTools.h"
+
 namespace GEO_BASE{
     Co3NeRestrictedVoronoiDiagram::Co3NeRestrictedVoronoiDiagram() :
             nb_points_(0),
@@ -136,7 +137,7 @@ namespace GEO_BASE{
     void Co3NeRestrictedVoronoiDiagram::get_RVC(GEO::index_t i, Eigen::MatrixXd tangent_basis,
                                                 Polygon_hd& P,Polygon_hd& Q,
                                                 GEO::vector<GEO::index_t>& neighbor,
-                                                GEO::vector<double>& squared_dist) const{
+                                                GEO::vector<double>& squared_dist){
         Eigen::MatrixXd temp = Co3NeTools::manifold_table *tangent_basis.transpose();
 
         Eigen::MatrixXd local_table = Co3NeTools::manifold_table*radius_;
@@ -187,5 +188,28 @@ namespace GEO_BASE{
             }
             nb_neigh = std::min(nb_neigh, nb_points()-1);
         }
+    }
+
+    void Co3NeRestrictedVoronoiDiagram::get_neighbor_by_3d(GEO::index_t i,
+                                                           GEO::vector<GEO::index_t>& neigh,
+                                                           GEO::vector<double>& sq_dist, GEO::index_t nb) {
+        GEO::vector<double> sq_dist_3d(nb);
+        if(sq_dist.size() < nb) {
+            sq_dist.resize(nb);
+        }
+        if(neigh.size() < nb) {
+            neigh.resize(nb);
+        }
+
+        NN3d_->get_nearest_neighbors(nb,i,neigh.data(),sq_dist_3d.data());
+
+        for(GEO::index_t j = 0; j < nb; ++j) {
+            GEO::index_t k = neigh[j];
+            double* p_hd = p_ + k * p_stride_;
+            double* pi_hd = p_ + i * p_stride_;
+
+            sq_dist[j] = Co3NeTools::L2_distance(p_hd, pi_hd, p_stride_);
+        }
+
     }
 }

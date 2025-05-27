@@ -18,14 +18,14 @@ int main(int argc, char **argv){
 
     std::string input_filename;
     std::string output_filename;
-    int nb_pts = 1000;
     int dim = 6;
+    bool post_process = true;
 
     if(argc == 5){
         input_filename = argv[1];
         output_filename = argv[2];
         dim = std::stoi(argv[3]);
-        nb_pts = std::stoi(argv[4]);
+        post_process = std::string(argv[4]) == "true";
     }else {
         std::cout << "Parameter length error" << std::endl;
         return 1;
@@ -39,7 +39,7 @@ int main(int argc, char **argv){
 
     RVD::SurfRec reconstructor;
     reconstructor.init(point_in);
-    reconstructor.Co3ne_rec(output_filename,dim);
+    reconstructor.Co3ne_rec(output_filename,dim,post_process);
 
 
     return 0;

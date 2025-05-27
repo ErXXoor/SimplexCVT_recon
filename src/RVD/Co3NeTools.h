@@ -31,6 +31,7 @@ namespace GEO_BASE{
 
         static Eigen::MatrixXd PCA_fit(Eigen::MatrixXd &points);
 
+        static double L2_distance(const double* p1, const double* p2, int dim);
 
         static Eigen::MatrixXd GenCircleTable(int numPoints);
         static constexpr GEO::index_t sincos_nb = 10;

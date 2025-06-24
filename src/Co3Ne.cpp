@@ -50,7 +50,7 @@ namespace GEO_BASE{
                 << "construct tangent plane"
                 << std::endl;
 
-        RVD_.set_nb_neighbors(60);
+        RVD_.set_nb_neighbors(40);
         RVD_.set_circles_radius(r);
 
         for(GEO::index_t t = 0; t < thread_.size(); t++) {

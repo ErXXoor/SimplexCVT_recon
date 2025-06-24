@@ -158,21 +158,26 @@ namespace GEO_BASE{
         // just in case, limit to 1000 neighbors.
         GEO::index_t max_neigh = std::min(GEO::index_t(1000), nb_points() - 1);
 
+        GEO::vector<double> sq_dist_3d;
+        get_neighbor_3d_dist(i, neighbor, sq_dist_3d, squared_dist.size());
+
         while(nb_neigh < max_neigh) {
             if(P.nb_vertices() < 3) {
                 return;
             }
             if(neighbor.size() < nb_neigh) {
                 get_neighbors(i, neighbor, squared_dist, nb_neigh);
+
+                get_neighbor_3d_dist(i, neighbor, squared_dist, squared_dist.size());
             }
             while(jj < nb_neigh && squared_dist[jj] < 1e-30) {
                 jj++;
             }
             while(jj < nb_neigh) {
 
-//                if(squared_dist[jj] > sqROS_) {
-//                    return;
-//                }
+                if(squared_dist[jj] > sqROS_) {
+                    return;
+                }
                 GEO::index_t j = neighbor[jj];
                 double Rk = Co3NeTools::squared_radius_hd(point_hd(i), P);
                 if(squared_dist[jj] > 4.0 * Rk) {
@@ -210,6 +215,20 @@ namespace GEO_BASE{
 
             sq_dist[j] = Co3NeTools::L2_distance(p_hd, pi_hd, p_stride_);
         }
-
     }
+
+    void Co3NeRestrictedVoronoiDiagram::get_neighbor_3d_dist(GEO::index_t i,
+                                                             GEO::vector<GEO::index_t> &neigh,
+                                                             GEO::vector<double>& sq_dist_3d,
+                                                             GEO::index_t nb) {
+        sq_dist_3d.resize(nb);
+        double* p_center = p_+ i * p_stride_;
+        for(GEO::index_t nb_i = 0; nb_i< nb; nb_i++) {
+            GEO::index_t neigh_i = neigh[nb_i];
+            double* p_neigh = p_ + neigh_i * p_stride_;
+
+            sq_dist_3d[nb_i] = Co3NeTools::L2_distance(p_center, p_neigh, 3);
+        }
+    }
+
 }

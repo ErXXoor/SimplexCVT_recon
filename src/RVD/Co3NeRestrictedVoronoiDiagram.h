@@ -37,6 +37,11 @@ namespace GEO_BASE{
                                 GEO::vector<double>& sq_dist,
                                 GEO::index_t nb);
 
+        void get_neighbor_3d_dist(GEO::index_t i,
+                                  GEO::vector<GEO::index_t>& neigh,
+                                  GEO::vector<double>& sq_dist_3d,
+                                  GEO::index_t nb);
+
     private:
         friend class Co3Ne;
 
@@ -63,7 +68,7 @@ namespace GEO_BASE{
 
         void set_circles_radius(double r) {
             radius_ = r;
-            sqROS_ = 4.0 * radius_ * radius_;  // squared radius of security
+            sqROS_ = 4.0 * radius_ * radius_*0.01;  // squared radius of security
             // when a neighbor is further away than ROS, then it cannot
             // clip a circle of radius r
         }

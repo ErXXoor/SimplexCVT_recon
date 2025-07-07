@@ -68,7 +68,7 @@ namespace GEO_BASE{
 
         void set_circles_radius(double r) {
             radius_ = r;
-            sqROS_ = 4.0 * radius_ * radius_*0.01;  // squared radius of security
+            sqROS_ = 4.0 * radius_ * radius_*0.01*0.4;  // squared radius of security
             // when a neighbor is further away than ROS, then it cannot
             // clip a circle of radius r
         }

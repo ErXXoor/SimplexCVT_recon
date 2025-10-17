@@ -138,7 +138,6 @@ namespace GEO_BASE{
                                                 Polygon_hd& P,Polygon_hd& Q,
                                                 GEO::vector<GEO::index_t>& neighbor,
                                                 GEO::vector<double>& squared_dist){
-        Eigen::MatrixXd temp = Co3NeTools::manifold_table *tangent_basis.transpose();
 
         Eigen::MatrixXd local_table = Co3NeTools::manifold_table*radius_;
         local_table = local_table*tangent_basis.transpose();
@@ -167,9 +166,9 @@ namespace GEO_BASE{
             }
             if(neighbor.size() < nb_neigh) {
                 get_neighbors(i, neighbor, squared_dist, nb_neigh);
-
-                get_neighbor_3d_dist(i, neighbor, squared_dist, squared_dist.size());
+//                get_neighbor_3d_dist(i, neighbor, squared_dist, nb_neigh);
             }
+
             while(jj < nb_neigh && squared_dist[jj] < 1e-30) {
                 jj++;
             }
